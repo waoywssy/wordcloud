@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charSet="utf-8"/>
+    <title>词云Demo</title>
+    <!--[if lt IE 9]><script type="text/javascript" src="excanvas.js"></script><![endif]-->
+    <script src="tagcanvas.js" type="text/javascript"></script>
+    <script type="text/javascript">
+      var queryLink ="http://www.boryi.com?q=";
+      var tags = [
+        {'keyword':'交通运输', 'color':'purple', 'size':180},
+        {'keyword':'教育', 'color':'red', 'size':170},
+        {'keyword':'视频', 'color':'brown', 'size':150 },
+        {'keyword':'餐饮', 'color':'#FFAAFF', 'size':160 },
+        {'keyword':'能源', 'color':'purple','size':140},
+      ];
+
+      function LoadTags(ulid, tags) {
+        tags = tags || []
+        for (var i = 0; i < tags.length; i++){
+          var tag = tags[i];
+          var li = document.createElement('li');
+          var a = document.createElement('a');
+          a.setAttribute('href', queryLink + tag.keyword);
+          a.setAttribute('target', "_blank");
+          a.setAttribute('style', "font-size: " + tag.size + "px; color:" + tag.color);
+          a.innerHTML = tag.keyword;
+          li.append(a);
+          document.getElementById(ulid).append(li);
+        }
+      }
+
+      window.onload = function() {
+
+        LoadTags("tags", tags);
+
+        try {
+          TagCanvas.Start('myCanvas','tags', {
+            initial:[0.01, 0],              //  默认x轴匀速
+            textFont:null,                  // 必须设置，否则字体会被默认值覆盖
+            textColour:null,                // 必须设置，否则文字颜色会被默认值覆盖
+            textFont:"PingFang SC Medium",
+            outlineMethod:"none",           // 取消标签选中时的边框
+            stretchX:2,                     // X轴拉伸一倍，成为椭圆
+            wheelZoom:false,                // 禁止鼠标滚动引起Zoom
+            lock:"xy",                      // 禁止鼠标移动引发滚动轴向变更
+            freezeActive:true,              // 鼠标悬停关键字时，阻止滚动
+            weight: true,                   // 允许设置权重
+            weightMode: "size",             // 权重模式设置为font和size都可订制
+          });
+        } catch(e) {
+          // something went wrong, hide the canvas container
+          document.getElementById('myCanvasContainer').style.display = 'none';
+        }
+      };
+    </script>
+  </head>
+  <body>
+    <h1>标签云Demo页面</h1>
+    <div id="myCanvasContainer">
+      <canvas width="1200" height="600" id="myCanvas">
+        <p>Anything in here will be replaced on browsers that support the canvas element</p>
+      </canvas>
+    </div>
+    <div>
+      <ul id="tags"></ul>
+    </div>
+  </body>
+</html>
